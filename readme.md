@@ -157,8 +157,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6...
 📨 API Endpoints
 🔐 Auth
 Method	Endpoint	Description
-POST	/api/v1/register	Register new user
-POST	/api/v1/login	Authenticate user
+POST	/api/v1/users/register	Register new user
+POST	/api/v1/users/login	Authenticate user
 
 🏘️ Properties
 Method	Endpoint	Description
