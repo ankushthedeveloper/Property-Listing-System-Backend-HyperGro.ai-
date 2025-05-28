@@ -4,7 +4,8 @@ import {
   getFavorites,
   updateFavorite,
 } from "@controllers/favorite.controller";
-import { isFavoriteOwner, verifyJWT } from "@middlewares/auth";
+import { verifyJWT } from "@middlewares/auth";
+import { isFavoriteOwner } from "@middlewares/authorization";
 import { asyncHandler } from "@utils/asyncHandler";
 import { Router } from "express";
 

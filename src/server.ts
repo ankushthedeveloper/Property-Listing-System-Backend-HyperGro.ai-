@@ -7,6 +7,7 @@ import { ErrorMessages } from '@constants/error.constants';
 import userRoutes from '@routes/user.routes'
 import propertyRoutes from '@routes/property.routes'
 import favoriteRoutes from '@routes/favorite.routes'
+import recommendationRoutes from '@routes/recommendation.routes'
 import dotenv from 'dotenv';
 import DomPurifyMiddleware from 'middlewares/DomPurify';
 import mongoSanitizeMiddleware from 'middlewares/mongoSanitize';
@@ -54,6 +55,7 @@ connect();
 server.use('/api/v1/users',userRoutes);
 server.use('/api/v1/properties',propertyRoutes);
 server.use('/api/v1/favorites',favoriteRoutes);
+server.use('/api/v1/recommendations',recommendationRoutes);
 
 server.listen(process.env.PORT,()=>{
     console.log("Server connected")

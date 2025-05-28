@@ -14,6 +14,8 @@ export const propertyResponse ={
 export const recommendationResponse={
     RECOMMENDATION_SENT:"Recommendation Sent Successfully",
     RECOMMENDATION_FETCHED_SUCCESS:"Recommendations fetched successfully",
+    RECOMMENDATION_UPDATE_SUCCESS:"Recommendation updated successfully",
+    RECOMMENDATION_DELETED_SUCCESS:"Recommendation deleted successfully"
 }
 
 export const favoriteResponse={
