@@ -1,6 +1,7 @@
 import { StatusCode } from "@constants/common.constants";
 import { ErrorMessages } from "@constants/error.constants";
 import { Favorite } from "@models/favorite";
+import { Property } from "@models/property";
 import { Recommendation } from "@models/recommendation";
 import { ApiError } from "@utils/apiResponse";
 import { asyncHandler } from "@utils/asyncHandler";
@@ -34,6 +35,20 @@ export const isRecommendationOwner = asyncHandler(
         throw new ApiError(StatusCode.UNAUTHORIZED,ErrorMessages.NOT_AUTHORIZED);
       }
       req.recommendation=recommendation;
+      next();
+    }
+)
+export const isPropertyOwner= asyncHandler(
+     async (req: any, res: Response, next: NextFunction) => {
+      const {propertyId}=req.params;
+      const property=await Property.findById(propertyId);
+      if(!property){
+        throw new ApiError(StatusCode.BAD_REQUEST,ErrorMessages.PROPERTY_NOT_FOUND);
+      }
+      if(property?.createdBy.toString()!==req.user._id.toString()){
+        throw new ApiError(StatusCode.UNAUTHORIZED,ErrorMessages.NOT_AUTHORIZED);
+      }
+      
       next();
     }
 )

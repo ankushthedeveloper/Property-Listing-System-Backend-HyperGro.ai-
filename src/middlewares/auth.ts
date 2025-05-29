@@ -2,9 +2,7 @@ import { AuthHeaderTokens } from "@constants/auth.constants";
 import { StatusCode } from "@constants/common.constants";
 import { ErrorMessages } from "@constants/error.constants";
 import { AuthorizationTokens } from "@HyperTypes/middlewares.types";
-import { Favorite } from "@models/favorite";
 import { Property } from "@models/property";
-import { Recommendation } from "@models/recommendation";
 import { User } from "@models/user";
 import { ApiError } from "@utils/apiResponse";
 import { asyncHandler } from "@utils/asyncHandler";
@@ -20,7 +18,7 @@ export const verifyJWT = asyncHandler(
     if (!accessToken || !refreshToken || !authId) {
       throw new ApiError(StatusCode.UNAUTHORIZED, ErrorMessages.NOT_AUTHORIZED);
     }
-
+  
     validateObjectId(authId);
 
     let decodedAccess: JwtPayload | null = null;
@@ -50,54 +48,6 @@ export const verifyJWT = asyncHandler(
     next();
   }
 );
-export const isPropertyOwner= asyncHandler(
-     async (req: any, res: Response, next: NextFunction) => {
-      const {propertyId}=req.params;
-      const property=await Property.findById(propertyId);
-      if(!property){
-        throw new ApiError(StatusCode.BAD_REQUEST,ErrorMessages.PROPERTY_NOT_FOUND);
-      }
-      if(property?.createdBy.toString()!==req.user._id.toString()){
-        throw new ApiError(StatusCode.UNAUTHORIZED,ErrorMessages.NOT_AUTHORIZED);
-      }
-      
-      next();
-    }
-)
-// export const isFavoriteOwner = asyncHandler(
-//     async (req: any, res: Response, next: NextFunction) => {
-//       const {favoriteId}=req.params;
- 
-//       const favorite=await Favorite.findById(favoriteId);
-//       if(!favorite){
-//         throw new ApiError(StatusCode.BAD_REQUEST,ErrorMessages.FAVORITE_NOT_FOUND);
-//       }
-//       if(favorite?.user.toString()!==req.user._id.toString()){
-//         throw new ApiError(StatusCode.UNAUTHORIZED,ErrorMessages.NOT_AUTHORIZED);
-//       }
-      
-//       next();
-//     }
-// )
-// export const isRecommendationOwner = asyncHandler(
-//   async (req: any, res: Response, next: NextFunction) => {
-//       const {recommendationId}=req.params;
-//       validateObjectId(recommendationId);
-//       const recommendation=await Recommendation.findById(recommendationId);
-//       if(!recommendation){
-//         throw new ApiError(StatusCode.BAD_REQUEST,ErrorMessages.RECOMMENDATION_NOT_FOUND);
-//       }
-//       if(recommendation?.fromUserId.toString()!==req.user._id.toString()){
-//         throw new ApiError(StatusCode.UNAUTHORIZED,ErrorMessages.NOT_AUTHORIZED);
-//       }
-//       req.recommendation=recommendation;
-//       next();
-//     }
-// )
-
-
-
-// ------------------Private Methods -------------------
 
 export const setMiddlewareData = (res: Response, data: AuthorizationTokens) => {
   res.locals.middlewareData = data;

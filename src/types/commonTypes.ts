@@ -1,3 +1,4 @@
+import { Request } from "express";
 import mongoose from "mongoose";
 
 export interface UserPayload {
@@ -12,4 +13,7 @@ export interface UserPayload {
   refreshToken?: string;
   createdAt?: Date;
   updatedAt?: Date;
+}
+export interface RequestWithUser<T = any> extends Request<T> {
+  user?: UserPayload;
 }

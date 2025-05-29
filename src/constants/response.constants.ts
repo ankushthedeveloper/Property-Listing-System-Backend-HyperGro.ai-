@@ -8,7 +8,7 @@ export const propertyResponse ={
     PROPERTY_UPDATION_SUCCESS:"Property updated successfully",
     PROPERTY_DELETION_SUCCESS:"Property deleted successfully", 
     PROPERTY_FETCHED_SUCCESS:"Property fetched successfully", 
-    
+    CACHED_PROPERTY_FETCHED:"[CACHE] Property fetched successfully"
 }
 
 export const recommendationResponse={

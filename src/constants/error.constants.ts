@@ -39,5 +39,7 @@ export const ErrorMessages ={
   ALREADY_RECOMMENDED:"You have already recommended the property to the user",
   SELF_RECOMMEND_NOT_ALLOWED:"Self recommend is not allowed , make the property favorite instead",
   RECOMMENDATION_NOT_FOUND:"Recommendation either deleted already or there is no recommendation",
-  INVALID_RECOMMENDATION_STATUS:"Invalid status filter. Use sent or received."
+  INVALID_RECOMMENDATION_STATUS:"Invalid status filter. Use sent or received.",
+
+  FAVORITE_ALREADY_CREATED:"Favorite already created"
 }
