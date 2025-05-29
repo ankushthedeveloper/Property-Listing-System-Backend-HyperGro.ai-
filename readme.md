@@ -1,5 +1,5 @@
 # 🏡 PropertyHub - Real Estate Listing & Recommendation Backend API
-
+POSTMAN DOCS : https://documenter.getpostman.com/view/32871222/2sB2qfAz1m
 A powerful, modular backend service for a real estate platform where users can manage properties, mark favorites with priority, and send personalized property recommendations to other users. Built using **TypeScript**, **Node.js**, **Express**, and **MongoDB**, it ensures scalability, maintainability, and extensibility.
 
 ---
