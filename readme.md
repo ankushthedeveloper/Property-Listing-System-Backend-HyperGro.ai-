@@ -243,17 +243,10 @@ GET /api/recommendations?type=sent or received
 🧪 Error Handling
 Uses ApiError and ApiResponse for consistency.
 
-ts
-Copy
-Edit
 throw new ApiError(StatusCode.BAD_REQUEST, 'Missing required fields');
-ts
-Copy
-Edit
 return new ApiResponse(StatusCode.SUCCESS, data, {}, 'Fetched successfully').send(res);
 🛡️ Security & Middleware
 JWT Auth Middleware: Attaches req.user
-
 Validation Utilities: validateEmail, validateObjectId, etc.
 
 Authorization Middleware: isRecommendationOwner ensures only senders can edit/delete
@@ -271,16 +264,12 @@ Enum-based validation and status filtering
 Set environment variables in .env:
 
 env
-Copy
-Edit
 MONGODB_URI=mongodb+srv://your-uri
 JWT_SECRET=your-secret
 PORT=5000
 Build and start:
 
 bash
-Copy
-Edit
 npm run build
 npm start
 For production: use Docker, PM2, or a cloud provider.
