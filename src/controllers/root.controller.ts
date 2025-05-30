@@ -16,6 +16,13 @@ export const serveRoot = async (req: Request, res: Response) => {
         timestamp: new Date().toISOString(),
       },
       endpoints: {
+        users: {
+          allUsers: {
+              method: "GET",
+              path: "/api/v1/users",
+              description: "Get all Users",
+            }
+        },
         auth: {
           register: {
             method: "POST",

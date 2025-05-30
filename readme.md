@@ -158,6 +158,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6...
   note: String
 }
 📨 API Endpoints
+Users
+Method	Endpoint	Description
+Get	/api/v1/users	Get All users
+
 🔐 Auth
 Method	Endpoint	Description
 POST	/api/v1/users/register	Register new user
