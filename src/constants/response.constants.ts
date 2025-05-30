@@ -1,6 +1,7 @@
 export const userResponse={
     REGISTER_SUCCESS:"Registered Successfully",
-    LOGIN_SUCCESS:"Welcome, Login Successfull"
+    LOGIN_SUCCESS:"Welcome, Login Successfull",
+    USER_FETCHED:"Users fetched Successfully"
 }
 
 export const propertyResponse ={

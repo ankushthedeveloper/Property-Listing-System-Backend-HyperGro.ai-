@@ -4,3 +4,5 @@ export const AuthHeaderTokens = {
   BEARER: "Bearer ",
   AUTHID: "authid",
 }
+
+export const removeSensitiveData ="-password -refreshToken"

@@ -1,4 +1,5 @@
 import {
+  getUsers,
   loginUser,
   logoutUser,
   registerUser,
@@ -12,5 +13,6 @@ const router = Router();
 router.route("/register").post(asyncHandler(registerUser));
 router.route("/login").post(asyncHandler(loginUser));
 router.route("/logout").post(verifyJWT, asyncHandler(logoutUser));
+router.route('/').get(asyncHandler(getUsers));
 
 export default router;

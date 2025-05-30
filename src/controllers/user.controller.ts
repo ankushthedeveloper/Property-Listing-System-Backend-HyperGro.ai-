@@ -1,13 +1,14 @@
-import { AuthHeaderTokens } from "@constants/auth.constants";
+import { AuthHeaderTokens, removeSensitiveData } from "@constants/auth.constants";
 import { StatusCode } from "@constants/common.constants";
 import { ErrorMessages } from "@constants/error.constants";
 import { userResponse } from "@constants/response.constants";
 import { UserPayload } from "@HyperTypes/commonTypes";
-import { IUser, User } from "@models/user";
+import { getMiddlewareData } from "@middlewares/auth";
+import { User } from "@models/user";
 import { ApiError, ApiResponse } from "@utils/apiResponse";
+import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { validateEmail, validateName } from "validations/commonValidations";
-
 export const generateAccessAndRefreshTokenForUser = async (id: string) => {
   const user: any = await User.findById(id);
 
@@ -40,11 +41,11 @@ export const registerUser = async (req: Request, res: Response) => {
   if (existingUser) {
     throw new ApiError(StatusCode.BAD_REQUEST, ErrorMessages.EMAIL_EXISTS);
   }
-
+  const hashedPassword = await bcrypt.hash(password, 10);
   const newUser: UserPayload = await User.create({
     name,
     email,
-    password,
+    password: hashedPassword,
   });
 
   if (!newUser) {
@@ -85,9 +86,17 @@ export const loginUser = async (req: Request, res: Response) => {
   const user: any = await User.findOne({ email });
   if (!user)
     throw new ApiError(StatusCode.NOT_FOUND, ErrorMessages.USER_NOT_FOUND);
-
-  const { accessToken, refreshToken } = await generateAccessAndRefreshTokenForUser(user._id);
-  user.refreshToken=refreshToken;
+  
+  const isMatch = await bcrypt.compare(password,user.password);
+  if (!isMatch) {
+    throw new ApiError(
+      StatusCode.BAD_REQUEST,
+      ErrorMessages.EMAIL_OR_PASSWORD_INVALID
+    );
+  }
+  const { accessToken, refreshToken } =
+    await generateAccessAndRefreshTokenForUser(user._id);
+  user.refreshToken = refreshToken;
   await user.save();
   return new ApiResponse(StatusCode.SUCCESS, {
     user,
@@ -102,6 +111,17 @@ export const loginUser = async (req: Request, res: Response) => {
   }).send(res);
 };
 
+// to get users for refrence (one simple Additional Api for inspection usecase)
+export const getUsers = async (req:Request,res:Response)=>{
+  const users=await User.find().select(removeSensitiveData);
+
+  return new ApiResponse(
+    StatusCode.SUCCESS,
+    {users},
+    {getMiddlewareData},
+    userResponse.USER_FETCHED
+  ).send(res);
+}
 // logout user
 export const logoutUser = async (req: any, res: any) => {
   await User.findByIdAndUpdate(req.user._id, { refreshToken: null }).lean();

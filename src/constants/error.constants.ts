@@ -41,5 +41,6 @@ export const ErrorMessages ={
   RECOMMENDATION_NOT_FOUND:"Recommendation either deleted already or there is no recommendation",
   INVALID_RECOMMENDATION_STATUS:"Invalid status filter. Use sent or received.",
 
-  FAVORITE_ALREADY_CREATED:"Favorite already created"
+  FAVORITE_ALREADY_CREATED:"Favorite already created",
+  EMAIL_OR_PASSWORD_INVALID:"Email or password is not correct"
 }
