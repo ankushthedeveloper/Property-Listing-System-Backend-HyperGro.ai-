@@ -35,3 +35,7 @@ export const commonTypes={
   String: "string",
   Object: "object",
 }
+
+export const commonCacheKey={
+  users:"users"
+}

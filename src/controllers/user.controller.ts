@@ -1,11 +1,15 @@
-import { AuthHeaderTokens, removeSensitiveData } from "@constants/auth.constants";
-import { StatusCode } from "@constants/common.constants";
+import {
+  AuthHeaderTokens,
+  removeSensitiveData,
+} from "@constants/auth.constants";
+import { commonCacheKey, StatusCode } from "@constants/common.constants";
 import { ErrorMessages } from "@constants/error.constants";
 import { userResponse } from "@constants/response.constants";
 import { UserPayload } from "@HyperTypes/commonTypes";
 import { getMiddlewareData } from "@middlewares/auth";
 import { User } from "@models/user";
 import { ApiError, ApiResponse } from "@utils/apiResponse";
+import redis from "@utils/redis";
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { validateEmail, validateName } from "validations/commonValidations";
@@ -54,7 +58,7 @@ export const registerUser = async (req: Request, res: Response) => {
       ErrorMessages.INTERNAL_SERVER_ERROR
     );
   }
-
+  await redis.del(commonCacheKey.users);
   const { refreshToken, accessToken } =
     await generateAccessAndRefreshTokenForUser(newUser._id.toString());
 
@@ -86,8 +90,8 @@ export const loginUser = async (req: Request, res: Response) => {
   const user: any = await User.findOne({ email });
   if (!user)
     throw new ApiError(StatusCode.NOT_FOUND, ErrorMessages.USER_NOT_FOUND);
-  
-  const isMatch = await bcrypt.compare(password,user.password);
+
+  const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     throw new ApiError(
       StatusCode.BAD_REQUEST,
@@ -112,16 +116,26 @@ export const loginUser = async (req: Request, res: Response) => {
 };
 
 // to get users for refrence (one simple Additional Api for inspection usecase)
-export const getUsers = async (req:Request,res:Response)=>{
-  const users=await User.find().select(removeSensitiveData);
-
+export const getUsers = async (req: Request, res: Response) => {
+  const users = await User.find().select(removeSensitiveData);
+  const cached = await redis.get(commonCacheKey.users);
+  if (cached) {
+    return new ApiResponse(
+      StatusCode.SUCCESS,
+      JSON.parse(cached),
+      {},
+      `[cached] ${userResponse.USER_FETCHED}`
+    ).send(res);
+  }
+  const response ={users}
+  await redis.set(commonCacheKey.users, JSON.stringify(response), "EX", 3600);
   return new ApiResponse(
     StatusCode.SUCCESS,
-    {users},
-    {getMiddlewareData},
+    { users },
+    { getMiddlewareData },
     userResponse.USER_FETCHED
   ).send(res);
-}
+};
 // logout user
 export const logoutUser = async (req: any, res: any) => {
   await User.findByIdAndUpdate(req.user._id, { refreshToken: null }).lean();
